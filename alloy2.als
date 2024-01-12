@@ -40,7 +40,7 @@ sig Hutang extends CategoryTransaction {}
 sig Tabungan extends CategoryTransaction {}
 
 // Predikat untuk memvalidasi transaksi
-pred validTransaction[t, u: Transaction] {
+pred validTransaction[t: Transaction] {
  t.id in Text1 and
   t.moneyIn > 0 and
   t.moneyOut >= 0 
@@ -65,9 +65,9 @@ pred validAccount[a: Account] {
 }
 
 // Predikat untuk memvalidasi semua entitas
-pred allValid[a: Account, t, u: Transaction, q: CategoryTransaction, r: Report] {
+pred allValid[a: Account, t: Transaction, q: CategoryTransaction, r: Report] {
   validAccount[a] and
-  validTransaction[t,u] and
+  validTransaction[t] and
   validCategoryTransaction[q] and
   validReport[r]
 }
@@ -80,8 +80,8 @@ validAccount[a]
 
 // Asumsi bahwa semua transaksi valid
 assert allTransactionsAreValid {
-  all t, u: Transaction |  not validTransaction[t,u] or
-validTransaction[t, u]
+  all t: Transaction |  not validTransaction[t] or
+validTransaction[t]
 }
 
 // Asumsi bahwa semua laporan valid
