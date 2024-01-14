@@ -72,6 +72,13 @@ pred allValid[a: Account, t: Transaction, q: CategoryTransaction, r: Report] {
   validReport[r]
 }
 
+fact {
+all a: Account | a.id != none and a.email != none and a.password != none and a.transaction in Transaction
+all b: Transaction | b.id != none and b.moneyIn > 0 and b.moneyOut >= 0 and b.report in Report and b.categoryTransaction in CategoryTransaction
+all r: Report | r.id != none and r.income > 0 and r.expense >= 0
+all c: CategoryTransaction | c.id != none and c.name != none
+}
+
 // Asumsi bahwa semua akun valid
 assert accountsAreValid {
   all a: Account | not validAccount[a] or
@@ -80,7 +87,7 @@ validAccount[a]
 
 // Asumsi bahwa semua transaksi valid
 assert allTransactionsAreValid {
-  all t: Transaction |  not validTransaction[t] or
+  all t: Transaction |  not validTransaction[t] and
 validTransaction[t]
 }
 
@@ -108,4 +115,4 @@ all p: CategoryTransaction | validCategoryTransaction[p]
 //check categoryTransactioAreValid for 2
 
 // Menjalankan predikat allValid
-run allValid for 2
+run allValid for 5
